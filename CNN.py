@@ -6,12 +6,13 @@ from tensorflow.keras.callbacks import TensorBoard
 import numpy as np
 import  matplotlib.pyplot as plt
 
-tensorboard=TensorBoard(log_dir="logs/CNN")
+tensorboard=TensorBoard(log_dir="logs")
 x=pickle.load(open("x_train.pickle","rb"))
 y=pickle.load(open("y_train.pickle","rb"))
 x_test=pickle.load(open("x_test.pickle","rb"))
 y_test=pickle.load(open("y_test.pickle","rb"))
-x = x/255.0
+x_test=np.array(x_test)
+x=np.array(x)
 
 model = Sequential()
 model.add(Conv2D(64,(3,3),input_shape = x.shape[1:]))
@@ -33,6 +34,6 @@ model.compile(loss="binary_crossentropy",
               optimizer="adam",
               metrics=["accuracy"],)
 
-model.fit(x,y,batch_size=32,epochs=5,validation_split=0.15,callbacks=[tensorboard])
+model.fit(x,y,batch_size=32,epochs=5,validation_split=0.1,callbacks=[tensorboard])
 val_loss, val_acc = model.evaluate(x_test,y_test)
 model.save("CNN_for_catdog")

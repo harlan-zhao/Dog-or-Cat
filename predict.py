@@ -12,7 +12,7 @@ model=tf.keras.models.load_model("CNN_for_catdog")
 categories=["dog","cat"]
 
 img_num = random.randint(0, 4000)
-predictions = model.predict(x_test[img_num].reshape(1, 100, 100, 1))
+predictions = model.predict(x_test[img_num].reshape(1, 50, 50, 1))
 print(predictions[0][0], y_test[img_num])
 temp = np.squeeze(x_test[img_num], axis=2)
 plt.imshow(temp, cmap="gray")
@@ -26,5 +26,5 @@ if res>=0.5:
     res=1
 else:
     res=0
-messagebox.showinfo("Prediction","The animal on the picture is {}".format(categories[res]))
+messagebox.showinfo("Prediction","The animal on the picture is a {}".format(categories[res]))
 

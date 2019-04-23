@@ -11,20 +11,26 @@ for Category in Categories:
         img_array=cv2.imread(img) 
 
 training_data=[]
-image_size=100
+image_size=50
+
 def pre_process_Data():
     for Category in Categories:
         class_name=Categories.index(Category)
         path=os.path.join(DataDir,Category) 
         for img in os.listdir(path):
             try:         
-                img_array=cv2.imread(os.path.join(path,img),cv2.IMREAD_GRAYSCALE) 
-                resized_array=cv2.resize(img_array,(image_size,image_size))
-                training_data.append([resized_array,class_name])
+                img_array=cv2.imread(os.path.join(path,img),0)
+                img_array=np.array(img_array)
+                # img_array =img_array.reshape(-1,image_size,image_size,1)
+                img_array=img_array/255.0
+                img_array=cv2.resize(img_array,(image_size,image_size))
+                training_data.append([img_array,class_name])
 
             except:
                 pass
 pre_process_Data()
+
+# Save the datasets we processed and divide it into two parts(one for training,one for testing)
 import pickle
 import random
 random.shuffle(training_data)
@@ -37,7 +43,6 @@ x_train=x[:20000]
 y_train=y[:20000]
 x_test=x[20000:]
 y_test=y[20000:]
-
 pickle_out = open("x_train.pickle","wb")
 pickle.dump(x_train, pickle_out)
 pickle_out.close()
